@@ -1,0 +1,150 @@
+<mvc:View
+	controllerName="com.demo.so.SalesOrder.controller.Detail"
+	xmlns="sap.m"
+	xmlns:semantic="sap.f.semantic"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:mvc="sap.ui.core.mvc">
+
+	<semantic:SemanticPage
+		id="detailPage"
+		busy="{detailView>/busy}"
+		busyIndicatorDelay="{detailView>/delay}">
+		<semantic:titleHeading>
+			<Title
+				text="{CustomerName}"
+				level="H2"/>
+		</semantic:titleHeading>
+		<semantic:headerContent>
+			<ObjectAttribute title="{i18n>priceTitle}"/>
+			<ObjectNumber
+				id="objectHeaderNumber"
+				number="{
+					path: 'GrossAmount',
+					formatter: '.formatter.currencyValue'
+				}"
+				unit="{CurrencyCode}"
+			/>
+		</semantic:headerContent>
+		<semantic:content>
+			<IconTabBar
+				id="idIconTabBarMulti"
+				expanded="{device>/isNoPhone}"
+				class="sapUiResponsiveContentPadding">
+				<items>
+					<IconTabFilter
+						icon="sap-icon://hint">
+						<Table
+							id="lineItemsList"
+							width="auto"
+							items="{ToLineItems}"
+							updateFinished=".onListUpdateFinished"
+							noDataText="{i18n>detailLineItemTableNoDataText}"
+							busyIndicatorDelay="{detailView>/lineItemTableDelay}">
+							<headerToolbar>
+								<Toolbar>
+									<Title
+										id="lineItemsTitle"
+										text="{detailView>/lineItemListTitle}"
+										titleStyle="H3"
+										level="H3"/>
+								</Toolbar>
+							</headerToolbar>
+							<columns>
+								<Column>
+									<Text text="{i18n>detailLineItemTableSoIDColumn}"/>
+								</Column>
+								<Column>
+									<Text text="{i18n>detailLineItemTableIDColumn}"/>
+								</Column>
+								<Column>
+									<Text text="{i18n>detailLineItemTableQtyColumn}"/>
+								</Column>
+								<Column
+									minScreenWidth="Tablet"
+									demandPopin="true">
+									<Text text="{i18n>detailLineItemTableUnitNumberColumn}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<ObjectIdentifier
+											text="{SalesOrderID}"/>
+										<ObjectIdentifier
+											title="{ProductID}"/>
+										<ObjectIdentifier
+											title="{Quantity}"/>	
+										<ObjectNumber
+											number="{GrossAmount}"
+											unit="{CurrencyCode}"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
+					<IconTabFilter
+						icon="sap-icon://group">
+						<f:SimpleForm id="SimpleFormDisplay354"
+							editable="false"
+							layout="ResponsiveGridLayout"
+							title="{i18n>detailBusinessPartnerFormTitle}"
+							labelSpanXL="3"
+							labelSpanL="3"
+							labelSpanM="3"
+							labelSpanS="12"
+							adjustLabelSpan="false"
+							emptySpanXL="4"
+							emptySpanL="4"
+							emptySpanM="4"
+							emptySpanS="0"
+							columnsXL="1"
+							columnsL="1"
+							columnsM="1"
+							singleContainerFullSize="false" >
+							<f:content>
+								<Label text="{i18n>detailBusinessPartnerBusPartId}" />
+								<Text text="{BusinessPartnerID}" />
+								<Label text="{i18n>detailBusinessPartnerBusPartName}" />
+								<Text text="{CompanyName}" />
+								<Label text="{i18n>detailBusinessPartnerBusPartAddress}" />
+								<Text text="{Address/Street} {Address/City}" />
+								<Label text="{i18n>detailBusinessPartnerBusPartPostCode}" />
+								<Text text="{Address/PostalCode}" />
+								<Label text="{i18n>detailBusinessPartnerBusPartCtry}" />
+								<Text text="{Address/Country}" />
+							</f:content>
+						</f:SimpleForm>
+					</IconTabFilter>
+				</items>
+			</IconTabBar>
+
+		</semantic:content>
+		<!--Semantic ShareMenu Buttons-->
+		<semantic:sendEmailAction>
+			<semantic:SendEmailAction
+				id="shareEmail"
+				press=".onSendEmailPress"/>
+		</semantic:sendEmailAction>
+
+		<semantic:closeAction>
+			<semantic:CloseAction
+					id="closeColumn"
+					press=".onCloseDetailPress"/>
+		</semantic:closeAction>
+
+		<semantic:fullScreenAction>
+			<semantic:FullScreenAction
+					id="enterFullScreen"
+					visible="{= !${device>/system/phone} &amp;&amp; !${appView>/actionButtonsInfo/midColumn/fullScreen}}"
+					press=".toggleFullScreen"/>
+		</semantic:fullScreenAction>
+		<semantic:exitFullScreenAction>
+			<semantic:ExitFullScreenAction
+					id="exitFullScreen"
+					visible="{= !${device>/system/phone} &amp;&amp; ${appView>/actionButtonsInfo/midColumn/fullScreen}}"
+					press=".toggleFullScreen"/>
+		</semantic:exitFullScreenAction>
+
+	</semantic:SemanticPage>
+
+</mvc:View>
